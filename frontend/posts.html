@@ -23,12 +23,18 @@
     </div>
   </nav>
     <!-- Contenido principal -->
-    <main class="d-flex flex-column justify-content-center align-items-center min-vh-100">
-      <div class="w-100" style="max-width: 500px; margin: auto">
-        <h2 class="mb-3 text-primary text-center">Crear nuevo post</h2>
-        <!-- Formulario centrado -->
-        <form id="postForm" class="card shadow-sm p-4">
+<main class="container d-flex justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <!-- Header -->
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0 text-center">Crear nuevo post</h4>
+      </div>
+      <!-- Body -->
+      <div class="card-body">
+        <form id="postForm">
           <div class="mb-3">
+            <label for="title" class="form-label">Título</label>
             <input
               type="text"
               id="title"
@@ -38,6 +44,7 @@
             />
           </div>
           <div class="mb-3">
+            <label for="content" class="form-label">Contenido</label>
             <textarea
               id="content"
               class="form-control"
@@ -46,10 +53,13 @@
               required
             ></textarea>
           </div>
-          <button type="submit" class="btn btn-primary w-100">Publicar</button>
+          <button type="submit" class="btn btn-success w-100">Publicar</button>
         </form>
       </div>
-    </main>
+    </div>
+  </div>
+</main>
+
     <!-- Footer -->
     <footer class="bg-dark text-white text-center p-3 mt-auto">
       <small>&copy; 2026 Mi Blog - Desarrollado por Leonardo</small>
