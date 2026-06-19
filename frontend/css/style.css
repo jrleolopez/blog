@@ -277,7 +277,10 @@ PERFIL
   margin: 0;
   font-weight: 700;
   color: rgb(33, 37, 41);
+<<<<<<< HEAD
   
+=======
+>>>>>>> dcbd0a171ba754562a242ae7a07c49889926a6b5
 }
 
 #profile p.role {
@@ -438,6 +441,7 @@ RESPONSIVE
     padding: 8px;
   }
 }
+<<<<<<< HEAD
 
 /* ==================================
 NAVBAR RESPONSIVE (ESTILO MODERNO)
@@ -565,3 +569,5 @@ BOTÓN HAMBURGUESA CON ANIMACIÓN
 
 
 
+=======
+>>>>>>> dcbd0a171ba754562a242ae7a07c49889926a6b5
