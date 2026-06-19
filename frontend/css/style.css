@@ -159,6 +159,9 @@ FORMULARIOS
 /* ==================================
 BLOG CARDS / POSTS
 ================================== */
+/* ==================================
+POSTS
+================================== */
 #posts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -167,7 +170,7 @@ BLOG CARDS / POSTS
 }
 
 .post-card {
-  background: #fdfdfd; /* blanco suave */
+  background: #ffffff; /* fondo blanco puro */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   padding: 20px;
@@ -175,10 +178,10 @@ BLOG CARDS / POSTS
   border-left: 4px solid #c9a227; /* detalle dorado */
 }
 
-
 .post-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  background: #fdf6e3; /* tono cálido al pasar el mouse */
 }
 
 .post-title {
@@ -190,7 +193,7 @@ BLOG CARDS / POSTS
 
 .post-content {
   font-size: 1rem;
-  color: #555;
+  color: #444;
   line-height: 1.6;
   margin-bottom: 15px;
   text-align: justify;
@@ -200,7 +203,7 @@ BLOG CARDS / POSTS
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  color: #999;
+  color: #777;
   font-style: italic;
   border-top: 1px solid #eee;
   padding-top: 10px;
@@ -213,13 +216,20 @@ PAGINACIÓN
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-top: 20px;
+  gap: 20px; /* separación entre botones y texto */
+  margin-top: 30px;
+  padding: 10px 0;
+}
+
+#pagination span {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgb(33, 37, 41);
 }
 
 #pagination button {
   border-radius: 6px;
-  padding: 6px 14px;
+  padding: 8px 16px;
   font-size: 0.9rem;
   font-weight: 600;
   background-color: rgb(33, 37, 41);
