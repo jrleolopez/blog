@@ -303,12 +303,8 @@ async function loadProfile() {
         <img src="${data.avatar && data.avatar.trim() !== "" 
           ? data.avatar 
           : "img/default-logo.png"}" 
-<<<<<<< HEAD
           alt="Avatar" class="avatar-img"
           onerror="this.src='img/default-logo.png'">
-=======
-          alt="Avatar" class="avatar-img">
->>>>>>> dcbd0a171ba754562a242ae7a07c49889926a6b5
         <h4>${data.username}</h4>
         <p class="bio-text">${data.bio || "Sin biografía"}</p>
       </div>
@@ -318,10 +314,6 @@ async function loadProfile() {
   }
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> dcbd0a171ba754562a242ae7a07c49889926a6b5
 document.getElementById("editProfileForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const token = localStorage.getItem("token");
@@ -442,7 +434,6 @@ async function deleteUser(userId) {
   }
 }
 
-<<<<<<< HEAD
 // Alternar animación del botón hamburguesa
 function toggleMenu() {
   const menu = document.getElementById("menu");        // contenedor del menú
@@ -456,5 +447,3 @@ function toggleMenu() {
 }
 
 
-=======
->>>>>>> dcbd0a171ba754562a242ae7a07c49889926a6b5
