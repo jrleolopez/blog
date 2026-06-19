@@ -10,36 +10,38 @@ CONFIGURACIÓN GENERAL
 html, body {
   height: 100%;
 }
+
 body {
   display: flex;
   flex-direction: column;
-  background-color: #f4f7fc;
+  background-color: #fdfdfd;
   font-family: "Poppins", sans-serif;
   color: #212529;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 /* ==================================
 NAVBAR
 ================================== */
 .navbar {
-  background: linear-gradient(135deg, #0d6efd, #6610f2) !important;
-  padding: 10px 0;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 12px 0;
 }
+
 .navbar-brand {
   font-weight: 700;
-  font-size: 1.2rem;
-  color: #fff !important;
+  font-size: 1.3rem;
+  color: #212529 !important;
 }
+
 .nav-link {
-  color: #fff !important;
+  color: #555 !important;
   transition: all 0.3s ease;
 }
+
 .nav-link:hover {
-  opacity: 0.85;
-  transform: translateY(-1px);
+  color: #c9a227 !important;
 }
 
 /* ==================================
@@ -47,26 +49,33 @@ CONTENIDO
 ================================== */
 main {
   flex: 1;
-  padding: 15px 0;
+  padding: 20px 0;
 }
+
 main h1, main h2, main h3, main h4 {
-  color: #0d6efd;
-  font-weight: 700;
+  color: #212529;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   margin-bottom: 15px;
 }
+
 .page-title {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #c9a227;
+  display: inline-block;
+  padding-bottom: 5px;
 }
 
 /* ==================================
 FOOTER
 ================================== */
 footer {
-  background: linear-gradient(135deg, #0d6efd, #6610f2);
-  color: #fff;
+  background-color: #fff;
+  color: #555;
+  border-top: 1px solid #e0e0e0;
   text-align: center;
-  padding: 12px;
+  padding: 14px;
   font-size: 0.9rem;
   margin-top: auto;
 }
@@ -75,47 +84,50 @@ footer {
 FORMULARIOS
 ================================== */
 .form-control {
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  border: 1px solid #ddd;
   padding: 10px;
+  background-color: #fff;
 }
+
 .form-control:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+  border-color: #c9a227;
+  box-shadow: 0 0 0 3px rgba(201,162,39,0.15);
 }
 
 /* ==================================
 BOTONES
 ================================== */
 .btn {
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 600;
   transition: 0.2s ease;
   padding: 8px 14px;
 }
+
 .btn:hover {
   transform: translateY(-2px);
 }
+
 .btn-primary {
-  background-color: #0d6efd;
+  background-color: #212529;
+  color: #fff;
   border: none;
 }
+
 .btn-primary:hover {
-  background-color: #0b5ed7;
+  background-color: #c9a227;
+  color: #fff;
 }
+
 .btn-success {
-  background-color: #198754;
+  background-color: #c9a227;
   border: none;
+  color: #fff;
 }
+
 .btn-success:hover {
-  background-color: #157347;
-}
-.btn-danger {
-  background-color: #dc3545;
-  border: none;
-}
-.btn-danger:hover {
-  background-color: #bb2d3b;
+  background-color: #b08e1f;
 }
 
 /* ==================================
@@ -126,10 +138,11 @@ LOGIN Y REGISTRO
   max-width: 380px;
   margin: auto;
 }
+
 .login-card .card, .register-card .card {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 /* ==================================
@@ -144,14 +157,15 @@ BLOG HOME
 
 .blog-card {
   background: #fff;
-  border-radius: 12px;
-  /* box-shadow: 0 6px 18px rgba(0,0,0,0.08); */
-  transition: all 0.2s ease;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
   overflow: hidden;
 }
+
 .blog-card:hover {
-  transform: translateY(-5px);
-  /* box-shadow: 0 10px 25px rgba(0,0,0,0.12); */
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
 .blog-card .card-body {
@@ -159,7 +173,7 @@ BLOG HOME
 }
 
 .blog-title {
-  color: #0d6efd;
+  color: #212529;
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 12px;
@@ -167,7 +181,7 @@ BLOG HOME
 }
 
 .blog-content {
-  color: #333;
+  color: #444;
   font-size: 1rem;
   line-height: 1.7;
   margin-bottom: 15px;
@@ -178,7 +192,7 @@ BLOG HOME
   display: flex;
   gap: 15px;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: #999;
   margin-top: 10px;
   font-style: italic;
 }
@@ -192,7 +206,7 @@ BLOG HOME
 .blog-card .card-footer {
   border-top: 1px solid #eee;
   padding: 12px 20px;
-  background: transparent; /* ya no hay doble fondo */
+  background: transparent;
   display: flex;
   gap: 10px;
 }
@@ -204,12 +218,21 @@ BLOG HOME
   gap: 15px;
   margin-top: 25px;
 }
+
 #pagination button {
   border-radius: 6px;
   padding: 6px 14px;
   font-size: 0.9rem;
   font-weight: 600;
+  background-color: #212529;
+  color: #fff;
+  border: none;
 }
+
+#pagination button:hover {
+  background-color: #c9a227;
+}
+
 #pagination .pagination-info {
   font-size: 0.9rem;
   color: #555;
@@ -219,27 +242,34 @@ BLOG HOME
 
 /* HERO */
 .hero-blog {
-  background: linear-gradient(135deg, #0d6efd, #6610f2);
-  color: #fff;
+  background-color: #fff;
+  color: #212529;
   padding: 60px 20px;
   border-radius: 15px;
   margin-bottom: 40px;
   text-align: center;
+  border: 1px solid #e0e0e0;
 }
+
 .hero-blog h1 {
   font-size: 2.5rem;
   font-weight: 700;
+  border-bottom: 2px solid #c9a227;
+  display: inline-block;
+  padding-bottom: 5px;
 }
+
 .hero-blog p {
   font-size: 1.1rem;
-  opacity: 0.9;
+  color: #555;
+  margin-top: 10px;
 }
 
 /* Perfil */
 .profile-card {
   display: flex;
   flex-direction: column;
-  align-items: center; /* centra horizontalmente */
+  align-items: center;
   justify-content: center;
   padding: 20px;
 }
@@ -249,10 +279,10 @@ BLOG HOME
   height: 150px;
   object-fit: cover;
   border-radius: 50%;
-  border: 1px solid #555 ;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   display: block;
-  margin: 0 auto; /* centra horizontalmente */
+  margin: 0 auto;
 }
 
 .bio-text {
@@ -275,4 +305,3 @@ BLOG HOME
     font-size: 2rem;
   }
 }
-
