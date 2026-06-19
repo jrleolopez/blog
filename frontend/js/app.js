@@ -300,8 +300,10 @@ async function loadProfile() {
     const profileDiv = document.getElementById("profile");
     profileDiv.innerHTML = `
       <div class="profile-card">
-        <img src="${data.avatar || "https://via.placeholder.com/150"}" 
-             alt="Avatar" class="avatar-img">
+        <img src="${data.avatar && data.avatar.trim() !== "" 
+          ? data.avatar 
+          : "img/default-logo.png"}" 
+          alt="Avatar" class="avatar-img">
         <h4>${data.username}</h4>
         <p class="bio-text">${data.bio || "Sin biografía"}</p>
       </div>
