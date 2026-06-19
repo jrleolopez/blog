@@ -1,48 +1,56 @@
 <!-- Sustituye {{title}} y {{content}} -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Inicio - Mi Blog</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body class="bg-light">
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-      <a class="navbar-brand" href="index.html">Mi Blog</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul id="navLinks" class="navbar-nav ms-auto"></ul>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Inicio - Mi Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar mb-4">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Mi Blog</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul id="navLinks" class="navbar-nav ms-auto"></ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <!-- Contenido -->
- <main class="container mb-5">
-  <h1 class="mb-4">Posts recientes</h1>
-  <div id="posts" class="row g-3"></div>
+    <!-- Contenido -->
+    <main class="container mb-5">
+      <h1 class="mb-4">Posts recientes</h1>
+      <div id="posts" class="row g-3"></div>
 
-  <!-- Contenedor para la paginación -->
-  <div id="pagination" class="d-flex justify-content-center mt-4"></div>
-</main>
+      <!-- Contenedor para la paginación -->
+      <div id="pagination" class="d-flex justify-content-center mt-4"></div>
+    </main>
 
-  <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-3 mt-auto">
-    <p class="mb-0">&copy; 2026 Mi Blog - Desarrollado por Leonardo</p>
-  </footer>
+    <!-- Footer -->
+    <footer class="custom-footer">
+      <p class="mb-0">&copy; 2026 Mi Blog - Desarrollado por Leonardo</p>
+    </footer>
 
-  <script src="js/app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    renderNavbar();   // genera el menú dinámico
-    loadPosts();      // carga los posts recientes
-  });
-</script>
-</body>
+    <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        renderNavbar(); // genera el menú dinámico
+        loadPosts(); // carga los posts recientes
+      });
+    </script>
+  </body>
 </html>

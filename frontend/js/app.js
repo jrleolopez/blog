@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/api";
+const API = "https://api-u1cj.onrender.com/api";
 
 document.addEventListener("DOMContentLoaded", () => {
   renderNavbar();
@@ -158,21 +158,17 @@ function renderNavbar() {
 
   if (token) {
     navLinks.innerHTML = `
-      <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-      ${
-        role === "admin"
-          ? `<li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>`
-          : ""
-      }
-      <li class="nav-item"><a class="nav-link" href="posts.html">Posts</a></li>
-      <li class="nav-item"><a class="nav-link" href="profile.html">Perfil</a></li>
-      <li class="nav-item"><a class="nav-link" href="#" onclick="logout()">Salir</a></li>
+      <li><a class="nav-link" href="index.html">Inicio</a></li>
+      ${role === "admin" ? `<li><a class="nav-link" href="dashboard.html">Dashboard</a></li>` : ""}
+      <li><a class="nav-link" href="posts.html">Posts</a></li>
+      <li><a class="nav-link" href="profile.html">Perfil</a></li>
+      <li><a class="nav-link" href="#" onclick="logout()">Salir</a></li>
     `;
   } else {
     navLinks.innerHTML = `
-      <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-      <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-      <li class="nav-item"><a class="nav-link" href="register.html">Registro</a></li>
+      <li><a class="nav-link" href="index.html">Inicio</a></li>
+      <li><a class="nav-link" href="login.html">Login</a></li>
+      <li><a class="nav-link" href="register.html">Registro</a></li>
     `;
   }
 }
@@ -192,53 +188,44 @@ async function loadPosts(page = 1) {
     const postsDiv = document.getElementById("posts");
     postsDiv.innerHTML = "";
 
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    const role = localStorage.getItem("role");
-
     data.posts.forEach((post) => {
       const div = document.createElement("div");
-      div.className = "blog-card";
+      div.className = "post-card";
 
       div.innerHTML = `
-  <article class="blog-card">
-    <div class="card-body">
-      <h3 class="blog-title">${post.title}</h3>
-      <p class="blog-content">${post.content}</p>
-      <div class="blog-meta">
-        <span class="author">👤 ${post.user?.username || "Desconocido"}</span>
-        <span class="date">📅 ${new Date(post.createdAt).toLocaleDateString()}</span>
-        <span class="likes">❤️ ${post.likes} likes</span>
-      </div>
-    </div>
-    <div class="card-footer">
-      ${localStorage.getItem("token") && localStorage.getItem("userId")
-        ? `<button class="btn btn-outline-primary btn-sm" onclick="likePost('${post._id}')">👍 Like</button>`
-        : ""}
-      ${(localStorage.getItem("role") === "admin" || post.user?._id === localStorage.getItem("userId"))
-        ? `<button class="btn btn-danger btn-sm ms-2" onclick="deletePost('${post._id}')">🗑 Eliminar</button>`
-        : ""}
-    </div>
-  </article>
-`;
+        <h3 class="post-title">${post.title}</h3>
+        <p class="post-content">${post.content}</p>
+        <div class="post-meta">
+          <span>👤 ${post.user?.username || "Desconocido"}</span>
+          <span>📅 ${new Date(post.createdAt).toLocaleDateString()}</span>
+          <span>❤️ ${post.likes} likes</span>
+        </div>
+        <div class="post-actions">
+          ${localStorage.getItem("token") && localStorage.getItem("userId")
+            ? `<button class="btn-like" onclick="likePost('${post._id}')">👍 Like</button>`
+            : ""}
+          ${(localStorage.getItem("role") === "admin" || post.user?._id === localStorage.getItem("userId"))
+            ? `<button class="btn-delete" onclick="deletePost('${post._id}')">🗑 Eliminar</button>`
+            : ""}
+        </div>
+      `;
 
       postsDiv.appendChild(div);
     });
 
     // Paginación
     const paginationDiv = document.getElementById("pagination");
-paginationDiv.innerHTML = `
-  <button class="btn btn-secondary" onclick="loadPosts(${page - 1})" ${page === 1 ? "disabled" : ""}>Anterior</button>
-  <span class="pagination-info mx-3">Página ${page} de ${data.pages}</span>
-  <button class="btn btn-secondary" onclick="loadPosts(${page + 1})" ${page === data.pages ? "disabled" : ""}>Siguiente</button>
-`;
-postsDiv.parentNode.appendChild(pagination);
+    paginationDiv.innerHTML = `
+      <button onclick="loadPosts(${page - 1})" ${page === 1 ? "disabled" : ""}>Anterior</button>
+      <span class="pagination-info">Página ${page} de ${data.pages}</span>
+      <button onclick="loadPosts(${page + 1})" ${page === data.pages ? "disabled" : ""}>Siguiente</button>
+    `;
   } catch {
     alert("Error al cargar posts");
   }
 }
 
-// Dar like con validación
+// Dar like
 async function likePost(id) {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -299,7 +286,7 @@ async function loadProfile() {
   const token = localStorage.getItem("token");
   if (!token) {
     document.getElementById("profile").innerHTML = `
-      <div class="alert alert-warning">Debes iniciar sesión para ver tu perfil.</div>
+      <div class="custom-alert">Debes iniciar sesión para ver tu perfil.</div>
     `;
     return;
   }
@@ -312,20 +299,23 @@ async function loadProfile() {
 
     const profileDiv = document.getElementById("profile");
     profileDiv.innerHTML = `
-  <div class="profile-card text-center">
-    <img src="${data.avatar || "https://via.placeholder.com/150"}" 
-         alt="Avatar" class="avatar-img mb-3">
-    <h4 class="fw-bold">${data.username}</h4>
-    <p class="bio-text">${data.bio || "Sin biografía"}</p>
-  </div>
-`;
-
+      <div class="profile-card">
+        <img src="${data.avatar && data.avatar.trim() !== "" 
+          ? data.avatar 
+          : "img/default-logo.png"}" 
+          alt="Avatar" class="avatar-img"
+          onerror="this.src='img/default-logo.png'">
+        <h4>${data.username}</h4>
+        <p class="bio-text">${data.bio || "Sin biografía"}</p>
+      </div>
+    `;
   } catch {
     alert("Error al cargar perfil");
   }
 }
 
-document.getElementById("editProfileForm").addEventListener("submit", async (e) => {
+
+document.getElementById("editProfileForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const token = localStorage.getItem("token");
   const formData = new FormData(e.target);
@@ -354,7 +344,7 @@ async function loadUsers() {
 
   if (role !== "admin") {
     usersDiv.innerHTML = `
-      <div class="alert alert-danger">No autorizado. Solo los administradores pueden ver esta sección.</div>
+      <div class="custom-alert">No autorizado. Solo los administradores pueden ver esta sección.</div>
     `;
     return;
   }
@@ -367,14 +357,14 @@ async function loadUsers() {
 
     if (!Array.isArray(data)) {
       usersDiv.innerHTML = `
-        <div class="alert alert-danger">${data.error || "Error al cargar usuarios"}</div>
+        <div class="custom-alert">${data.error || "Error al cargar usuarios"}</div>
       `;
       return;
     }
 
     usersDiv.innerHTML = `
-      <h2 class="mb-3">Gestión de Usuarios</h2>
-      <table class="table table-striped">
+      <h2>Gestión de Usuarios</h2>
+      <table>
         <thead>
           <tr>
             <th>Usuario</th>
@@ -383,24 +373,18 @@ async function loadUsers() {
           </tr>
         </thead>
         <tbody>
-          ${data
-            .map(
-              (user) => `
+          ${data.map(user => `
             <tr>
               <td>${user.username}</td>
               <td>${user.role}</td>
               <td>
-                ${
-                  user.role === "admin"
-                    ? `<button class="btn btn-sm btn-secondary" onclick="updateUserRole('${user._id}', 'user')">Revertir a User</button>`
-                    : `<button class="btn btn-sm btn-warning" onclick="updateUserRole('${user._id}', 'admin')">Promover a Admin</button>`
-                }
-                <button class="btn btn-sm btn-danger ms-2" onclick="deleteUser('${user._id}')">Eliminar</button>
+                ${user.role === "admin"
+                  ? `<button class="btn-form" onclick="updateUserRole('${user._id}', 'user')">Revertir a Usuario</button>`
+                  : `<button class="btn-form" onclick="updateUserRole('${user._id}', 'admin')">Administrador</button>`}
+                <button class="btn-delete" onclick="deleteUser('${user._id}')">Eliminar</button>
               </td>
             </tr>
-          `,
-            )
-            .join("")}
+          `).join("")}
         </tbody>
       </table>
     `;
@@ -450,3 +434,17 @@ async function deleteUser(userId) {
     alert("Error de conexión con el servidor");
   }
 }
+
+// Alternar animación del botón hamburguesa
+function toggleMenu() {
+  const menu = document.getElementById("menu");        // contenedor del menú
+  const toggle = document.getElementById("menu-toggle"); // botón hamburguesa
+
+  // abrir/cerrar menú
+  menu.classList.toggle("show");
+
+  // activar animación del botón
+  toggle.classList.toggle("active");
+}
+
+
