@@ -3,7 +3,6 @@ const API = "https://api-u1cj.onrender.com/api";
 document.addEventListener("DOMContentLoaded", () => {
   renderNavbar();
 
-  // Registro
   const registerForm = document.getElementById("registerForm");
   if (registerForm) {
     registerForm.addEventListener("submit", async (e) => {
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Login
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
@@ -67,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Crear post
   const postForm = document.getElementById("postForm");
   if (postForm) {
     postForm.addEventListener("submit", async (e) => {
@@ -104,13 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Mostrar posts
   if (document.getElementById("posts")) loadPosts();
-
-  // Perfil
   if (document.getElementById("profile")) loadProfile();
 
-  // Editar perfil
   const profileForm = document.getElementById("profileForm");
   if (profileForm) {
     profileForm.addEventListener("submit", async (e) => {
@@ -148,7 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Navbar dinámico
 function renderNavbar() {
   const navLinks = document.getElementById("navLinks");
   if (!navLinks) return;
@@ -173,13 +165,21 @@ function renderNavbar() {
   }
 }
 
-// Logout
+function toggleMenu() {
+  const menu = document.getElementById("menu");
+  const toggle = document.getElementById("menu-toggle");
+
+  menu.classList.toggle("show");
+  toggle.classList.toggle("active");
+}
+
 function logout() {
   localStorage.clear();
   window.location.href = "login.html";
 }
 
-// Cargar posts
+document.addEventListener("DOMContentLoaded", renderNavbar);
+
 async function loadPosts(page = 1) {
   try {
     const res = await fetch(`${API}/posts?page=${page}&limit=5`);
@@ -213,7 +213,6 @@ async function loadPosts(page = 1) {
       postsDiv.appendChild(div);
     });
 
-    // Paginación
     const paginationDiv = document.getElementById("pagination");
     paginationDiv.innerHTML = `
       <button onclick="loadPosts(${page - 1})" ${page === 1 ? "disabled" : ""}>Anterior</button>
@@ -225,7 +224,6 @@ async function loadPosts(page = 1) {
   }
 }
 
-// Dar like
 async function likePost(id) {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -256,7 +254,6 @@ async function likePost(id) {
   }
 }
 
-// Eliminar post
 async function deletePost(id) {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -281,7 +278,6 @@ async function deletePost(id) {
   }
 }
 
-// Cargar perfil
 async function loadProfile() {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -333,7 +329,6 @@ document.getElementById("editProfileForm")?.addEventListener("submit", async (e)
   }
 });
 
-// Cargar lista de usuarios (solo admin)
 async function loadUsers() {
   const usersDiv = document.getElementById("users");
   if (!usersDiv) return;
@@ -392,7 +387,6 @@ async function loadUsers() {
   }
 }
 
-// Actualizar rol de usuario
 async function updateUserRole(userId, newRole) {
   const token = localStorage.getItem("token");
   try {
@@ -412,7 +406,6 @@ async function updateUserRole(userId, newRole) {
   }
 }
 
-// Eliminar usuario (solo admin)
 async function deleteUser(userId) {
   const token = localStorage.getItem("token");
   if (!confirm("¿Seguro que deseas eliminar este usuario?")) return;
@@ -433,17 +426,4 @@ async function deleteUser(userId) {
     alert("Error de conexión con el servidor");
   }
 }
-
-// Alternar animación del botón hamburguesa
-function toggleMenu() {
-  const menu = document.getElementById("menu");        // contenedor del menú
-  const toggle = document.getElementById("menu-toggle"); // botón hamburguesa
-
-  // abrir/cerrar menú
-  menu.classList.toggle("show");
-
-  // activar animación del botón
-  toggle.classList.toggle("active");
-}
-
 
