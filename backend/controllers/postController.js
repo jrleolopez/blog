@@ -1,12 +1,11 @@
 const Post = require("../models/Post");
 
-// Crear post
 exports.createPost = async (req, res) => {
   try {
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      user: req.user.id // 👈 guarda el autor del post
+      user: req.user.id
     });
     await post.save();
     res.status(201).json(post);
@@ -15,7 +14,6 @@ exports.createPost = async (req, res) => {
   }
 };
 
-// Obtener posts con paginación y autor
 exports.getPosts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -26,7 +24,7 @@ exports.getPosts = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate("user", "username"); // 👈 trae el nombre del autor
+      .populate("user", "username");
 
     const total = await Post.countDocuments();
 
@@ -36,7 +34,6 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-// Dar like a un post
 exports.likePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -50,7 +47,6 @@ exports.likePost = async (req, res) => {
   }
 };
 
-// Eliminar post
 exports.deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);

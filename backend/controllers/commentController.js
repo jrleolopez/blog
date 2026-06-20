@@ -1,6 +1,5 @@
 const Comment = require("../models/Comment");
 
-// Crear comentario
 exports.createComment = async (req, res) => {
   try {
     const { text } = req.body;
@@ -16,7 +15,6 @@ exports.createComment = async (req, res) => {
   }
 };
 
-// Obtener comentarios con paginación
 exports.getComments = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -36,7 +34,6 @@ exports.getComments = async (req, res) => {
   }
 };
 
-// Dar like a un comentario
 exports.likeComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
@@ -50,7 +47,6 @@ exports.likeComment = async (req, res) => {
   }
 };
 
-// Eliminar comentario
 exports.deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
