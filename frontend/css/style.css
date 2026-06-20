@@ -1,6 +1,4 @@
-/* ==================================
-TIPOGRAFÍA Y BASE
-================================== */
+/* TIPOGRAFÍA Y BASE */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 * {
   margin: 0;
@@ -14,7 +12,7 @@ html, body {
 
 body {
   display: grid;
-  grid-template-rows: auto 1fr auto; /* Header - Main - Footer */
+  grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   background-color: #f8f9fa;
   font-family: 'Montserrat', sans-serif;
@@ -22,14 +20,19 @@ body {
   line-height: 1.7;
 }
 
-/* ==================================
-NAVBAR
-================================== */
+/* NAVBAR */
 .custom-navbar {
   grid-row: 1;
   background-color: rgb(33, 37, 41);
   border-bottom: 2px solid #c9a227;
   padding: 12px 0;
+}
+
+.custom-navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
 .navbar-brand {
@@ -39,11 +42,23 @@ NAVBAR
   letter-spacing: 1px;
 }
 
+.navbar-collapse {
+  display: flex;
+}
+
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin-left: auto;
+}
+
 .nav-link {
   color: #fff !important;
   position: relative;
   transition: color 0.3s ease;
   font-weight: 500;
+  padding: 8px 12px;
 }
 
 .nav-link::after {
@@ -65,9 +80,11 @@ NAVBAR
   width: 100%;
 }
 
-/* ==================================
-FOOTER
-================================== */
+.menu-toggle {
+  display: none;
+}
+
+/* FOOTER */
 .custom-footer {
   grid-row: 3;
   background-color: rgb(33, 37, 41);
@@ -78,9 +95,7 @@ FOOTER
   border-top: 2px solid #c9a227;
 }
 
-/* ==================================
-HEADINGS
-================================== */
+/* HEADINGS */
 main h1, main h2, main h3, main h4 {
   color: rgb(33, 37, 41);
   font-weight: 700;
@@ -98,9 +113,7 @@ main h1::after {
   margin-top: 8px;
 }
 
-/* ==================================
-CARDS
-================================== */
+/* CARDS */
 .card {
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -108,6 +121,7 @@ CARDS
 }
 
 .custom-card-header {
+  width: 100%;
   background-color: rgb(33, 37, 41);
   color: #fff !important;
   text-align: center;
@@ -123,9 +137,7 @@ CARDS
   margin: 0;
 }
 
-/* ==================================
-FORMULARIOS
-================================== */
+/* FORMULARIOS */
 .form-control {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -156,19 +168,17 @@ FORMULARIOS
   transform: translateY(-2px);
 }
 
-/* ==================================
-POSTS
-================================== */
+/* POSTS */
 #posts {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  margin: 20px auto; /* centrado */
-  justify-content: center; /* centra las columnas */
+  margin: 20px auto;
+  justify-content: center;
 }
 
 .post-card {
-  max-width: 400px; /* cada tarjeta no pasa de 400px */
+  max-width: 400px;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -214,9 +224,7 @@ POSTS
   margin-top: 12px;
 }
 
-/* ==================================
-BOTONES DE ACCIÓN
-================================== */
+/* BOTONES DE ACCIÓN */
 .btn-like {
   background-color: #198754;
   color: #fff;
@@ -251,10 +259,7 @@ BOTONES DE ACCIÓN
   transform: translateY(-2px);
 }
 
-
-/* ==================================
-PERFIL
-================================== */
+/* PERFIL */
 #profile {
   display: flex;
   flex-direction: column;
@@ -277,7 +282,10 @@ PERFIL
   margin: 0;
   font-weight: 700;
   color: rgb(33, 37, 41);
-  
+}
+
+#profile h4 {
+padding: 10px 0 0 0;
 }
 
 #profile p.role {
@@ -304,24 +312,7 @@ PERFIL
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-
-/* ==================================
-ALERTAS PERSONALIZADAS
-================================== */
-.custom-alert {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeeba;
-  border-radius: 6px;
-  padding: 12px;
-  margin: 15px 0;
-  font-size: 0.95rem;
-  text-align: center;
-}
-
-/* ==================================
-GESTIÓN DE USUARIOS
-================================== */
+/* GESTIÓN DE USUARIOS */
 #users {
   margin: 30px 0;
   padding: 20px;
@@ -369,9 +360,7 @@ GESTIÓN DE USUARIOS
   margin-left: 8px;
 }
 
-/* ==================================
-PAGINACIÓN (CORREGIDA)
-================================== */
+/* PAGINACIÓN */
 #pagination {
   display: flex;
   justify-content: center;
@@ -410,31 +399,171 @@ PAGINACIÓN (CORREGIDA)
   color: rgb(33, 37, 41);
 }
 
-.custom-card-header h1,
-.custom-card-header h2,
-.custom-card-header h3,
-.custom-card-header h4 {
-  color: #fff !important;
-  margin: 0;
+main.container.d-flex.justify-content-center {
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* ==================================
-RESPONSIVE
-================================== */
+/* LOGIN & REGISTRO */
+.login-card,
+.register-card,
+.register-post {
+  max-width: 600px;     
+  width: 100%;            
+  margin: 20px auto;      
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.login-card .card-body,
+.register-card .card-body,
+.register-post .card-body {
+  width: 100%;
+}
+
+.login-card .form-control,
+.register-card .form-control,
+.register-post .form-control {
+  width: 100%;
+}
+
+.login-card .btn-form,
+.register-card .btn-form,
+.register-post .btn-form {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   #posts {
     grid-template-columns: 1fr;
   }
+
   .hero-blog {
     padding: 40px 15px;
   }
+
   .hero-blog h1 {
     font-size: 2rem;
   }
+
   #users table {
     font-size: 0.85rem;
   }
+
   #users th, #users td {
     padding: 8px;
+  }
+
+  .custom-navbar {
+    width: 100%;
+  }
+
+  .navbar-container,
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 15px;
+    margin: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  .navbar-collapse {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    width: 100%;
+    background-color: #222;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(-15px);
+    pointer-events: none;
+    transition: none;
+  }
+
+  .navbar-collapse.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    position: relative;
+  }
+
+  .nav-link:hover {
+    background-color: #333;
+    color: #c9a227 !important;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #c9a227;
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    display: block;
+    height: 3px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+  .menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+
+  .login-card,
+  .register-card,
+  .register-post {
+    max-width: 95%;
+    padding: 15px;
   }
 }
