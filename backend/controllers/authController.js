@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const multer = require("multer");
 
+// Configuración de subida de avatar
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/avatars");
@@ -11,36 +12,82 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + "-" + file.originalname);
   }
 });
-
 const upload = multer({ storage });
 
+// Registro directo sin verificación por correo
 exports.register = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { firstName, lastName, email, username, password, confirmPassword } = req.body;
+
+    if (!firstName || !lastName || !email || !username || !password || !confirmPassword) {
+      return res.status(400).json({ error: "Todos los campos son obligatorios" });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Las contraseñas no coinciden" });
+    }
+
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+    if (!regex.test(password)) {
+      return res.status(400).json({ error: "La contraseña debe tener mínimo 8 caracteres, incluir mayúscula, minúscula, número y símbolo." });
+    }
+
+    // Validar duplicados
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(409).json({ error: "El correo ya está registrado" });
+    }
+
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(409).json({ error: "El nombre de usuario ya está en uso" });
+    }
+
     const hashed = await bcrypt.hash(password, 10);
-    const user = new User({ username, password: hashed, role: "user" });
+    const user = new User({
+      firstName,
+      lastName,
+      email,
+      username,
+      password: hashed,
+      role: "user"
+    });
+
     await user.save();
-    res.status(201).json({ message: "Usuario registrado" });
+
+    res.status(201).json({ message: "Usuario registrado correctamente" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    if (error.code === 11000) {
+      return res.status(409).json({ error: "Usuario o correo ya registrado" });
+    }
+    res.status(500).json({ error: error.message });
   }
 };
 
+// Login directo sin verificación de correo
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { identifier, password } = req.body; 
+    // "identifier" puede ser email o username
+
+    // Buscar por email o username
+    const user = await User.findOne({
+      $or: [{ email: identifier }, { username: identifier }]
+    });
     if (!user) return res.status(400).json({ error: "Usuario no encontrado" });
 
+    // Validar contraseña
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ error: "Contraseña incorrecta" });
 
+    // Generar token JWT
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.SECRET,
       { expiresIn: "1h" }
     );
 
+    // Responder con token y datos básicos
     res.json({
       token,
       role: user.role,
@@ -52,6 +99,7 @@ exports.login = async (req, res) => {
   }
 };
 
+// Obtener perfil
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select("-password");
@@ -62,6 +110,7 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+// Actualizar perfil
 exports.updateProfile = async (req, res) => {
   try {
     const { bio, avatar } = req.body;
@@ -82,6 +131,7 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+// Actualizar perfil con subida de avatar
 exports.updateProfileWithAvatar = [
   upload.single("avatar"),
   async (req, res) => {
@@ -104,6 +154,7 @@ exports.updateProfileWithAvatar = [
   }
 ];
 
+// Actualizar rol de usuario (solo admin)
 exports.updateRole = async (req, res) => {
   try {
     if (!req.user || req.user.role !== "admin") {
@@ -122,6 +173,7 @@ exports.updateRole = async (req, res) => {
   }
 };
 
+// Listar todos los usuarios (solo admin)
 exports.getUsers = async (req, res) => {
   try {
     if (!req.user || req.user.role !== "admin") {
@@ -135,6 +187,7 @@ exports.getUsers = async (req, res) => {
   }
 };
 
+// Eliminar usuario (solo admin)
 exports.deleteUser = async (req, res) => {
   try {
     if (!req.user || req.user.role !== "admin") {
@@ -149,3 +202,4 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+

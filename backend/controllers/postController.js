@@ -5,14 +5,20 @@ exports.createPost = async (req, res) => {
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
+      category: req.body.category || "General",
+      image: req.file 
+        ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}` 
+        : "",
       user: req.user.id
     });
+
     await post.save();
     res.status(201).json(post);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 exports.getPosts = async (req, res) => {
   try {

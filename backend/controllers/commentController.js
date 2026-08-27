@@ -1,32 +1,43 @@
 const Comment = require("../models/Comment");
+const Post = require("../models/Post");
 
+// Crear comentario
 exports.createComment = async (req, res) => {
   try {
-    const { text } = req.body;
+    const { content } = req.body; // 👈 usar "content" en lugar de "text"
+    const post = await Post.findById(req.params.postId);
+    if (!post) return res.status(404).json({ error: "Post no encontrado" });
+
     const comment = new Comment({
-      text,
+      content,
       user: req.user.id,
-      postId: req.params.postId
+      post: post._id
     });
+
     await comment.save();
+    post.comments.push(comment._id); // 👈 vincular al post
+    await post.save();
+
     res.status(201).json(comment);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
+// Obtener comentarios con paginación
 exports.getComments = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
     const skip = (page - 1) * limit;
 
-    const comments = await Comment.find({ postId: req.params.postId })
+    const comments = await Comment.find({ post: req.params.postId })
+      .populate("user", "username")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    const total = await Comment.countDocuments({ postId: req.params.postId });
+    const total = await Comment.countDocuments({ post: req.params.postId });
 
     res.json({ comments, total, page, pages: Math.ceil(total / limit) });
   } catch (error) {
@@ -34,6 +45,7 @@ exports.getComments = async (req, res) => {
   }
 };
 
+// Dar like a un comentario
 exports.likeComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
@@ -47,6 +59,7 @@ exports.likeComment = async (req, res) => {
   }
 };
 
+// Eliminar comentario
 exports.deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
