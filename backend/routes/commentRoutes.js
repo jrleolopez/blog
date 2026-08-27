@@ -8,9 +8,16 @@ const {
   deleteComment
 } = require("../controllers/commentController");
 
-router.post("/:postId/comments", protect, createComment);
-router.get("/:postId/comments", getComments);
+// Crear comentario en un post
+router.post("/posts/:postId/comments", protect, createComment);
+
+// Obtener comentarios de un post con paginación
+router.get("/posts/:postId/comments", getComments);
+
+// Dar like a un comentario
 router.post("/comments/:id/like", protect, likeComment);
+
+// Eliminar comentario (solo autor o admin)
 router.delete("/comments/:id", protect, deleteComment);
 
 module.exports = router;
