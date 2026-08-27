@@ -320,7 +320,6 @@ async function loadPosts(page = 1) {
         <div class="post-actions">
           ${localStorage.getItem("token") && localStorage.getItem("userId")
             ? `<button class="btn-like" onclick="likePost('${post._id}')">👍 Like</button>
-               <button class="btn-save" onclick="savePost('${post._id}')">⭐ Guardar</button>
                <button class="btn-share" onclick="sharePost('${post._id}')">🔗 Compartir</button>`
             : ""}
           ${(localStorage.getItem("role") === "admin" || post.user?._id === localStorage.getItem("userId"))
