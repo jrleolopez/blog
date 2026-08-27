@@ -224,6 +224,16 @@ main h1::after {
   margin-top: 12px;
 }
 
+.error-message {
+  display: none;
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+.form-group.error .error-message {
+  display: block;
+}
+
 /* BOTONES DE ACCIÓN */
 .btn-like {
   background-color: #198754;
