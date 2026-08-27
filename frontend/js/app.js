@@ -381,7 +381,7 @@ async function loadPostDetail(id) {
 
 
 function sharePost(id) {
-  const url = `${window.location.origin}/posts.html?id=${id}`;
+  const url = `${window.location.origin}/post.html?id=${id}`;
   navigator.clipboard.writeText(url).then(() => {
     showToast("Enlace copiado al portapapeles", "info");
   });
