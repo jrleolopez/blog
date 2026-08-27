@@ -252,6 +252,24 @@ function toggleCommentForm() {
     formContainer.style.display = "none";
   }
 }
+
+
+function renderComments(comments) {
+  const commentsList = document.getElementById("comments-list");
+  commentsList.innerHTML = "";
+
+  comments.forEach(comment => {
+    const div = document.createElement("div");
+    div.className = "comment-card";
+    div.innerHTML = `
+      <span class="author">${comment.user}:</span>
+      <span class="text">${comment.text}</span>
+      <button class="btn-delete" onclick="deleteComment('${comment._id}')">🗑 Eliminar</button>
+    `;
+    commentsList.appendChild(div);
+  });
+}
+
 // --- Eliminar comentarios ---
 
 async function deleteComment(commentId, postId) {
@@ -300,7 +318,7 @@ async function loadPosts(page = 1) {
       if (!post || !post.title) return;
 
       const div = document.createElement("div");
-      div.className = "post-card col-md-4";
+      div.className = "post-card";
 
       div.innerHTML = `
         <img src="${post.image || 'img/default-post.jpg'}" 
@@ -311,7 +329,11 @@ async function loadPosts(page = 1) {
           </a>
         </h3>
         <span class="badge bg-warning text-dark">${post.category || "General"}</span>
-        <p class="post-content">${post.content || ""}</p>
+        <p class="post-content">
+  ${(post.content && post.content.length > 120) 
+    ? post.content.substring(0, 120) + "..." 
+    : post.content || ""}
+</p>
         <div class="post-meta">
           <span>👤 ${post.user?.username || "Desconocido"}</span>
           <span>📅 ${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : ""}</span>
@@ -377,6 +399,40 @@ async function loadPostDetail(id) {
     showToast("Error al cargar detalle del post", "danger");
   }
 }
+
+async function likePost(id) {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
+  if (!token || !userId) {
+    showToast("Debes iniciar sesión para dar like.", "warning");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/posts/${id}/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId })
+    });
+
+    const data = await res.json();
+    if (res.status === 200) {
+      // actualizar contador en pantalla
+      const likesSpan = document.getElementById(`likes-${id}`);
+      if (likesSpan) likesSpan.textContent = `❤️ ${data.likes} likes`;
+      showToast("Like registrado", "success");
+    } else {
+      showToast(data.error || "Error al dar like", "danger");
+    }
+  } catch (err) {
+    showToast("Error de conexión con el servidor", "danger");
+  }
+}
+
 
 
 
