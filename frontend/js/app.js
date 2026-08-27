@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/api";
+const API = "https://api-u1cj.onrender.com/api";
 
 document.addEventListener("DOMContentLoaded", () => {
   renderNavbar();
