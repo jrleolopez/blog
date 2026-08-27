@@ -117,9 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const data = await res.json();
         if (res.status === 201) {
-          showToast("Post creado correctamente", "success");
-          window.location.href = "index.html";
-        } else {
+  showToast("Post creado correctamente", "success");
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 2000);
+} else {
           showToast(data.error || "Error al crear post", "danger");
         }
       } catch {
