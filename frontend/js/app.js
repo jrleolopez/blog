@@ -254,7 +254,7 @@ function toggleCommentForm() {
 }
 
 
-function renderComments(comments) {
+function renderComments(comments, postId) {
   const commentsList = document.getElementById("comments-list");
   commentsList.innerHTML = "";
 
@@ -262,13 +262,14 @@ function renderComments(comments) {
     const div = document.createElement("div");
     div.className = "comment-card";
     div.innerHTML = `
-      <span class="author">${comment.user}:</span>
+      <span class="author">${comment.user?.username || "Anónimo"}:</span>
       <span class="text">${comment.text}</span>
-      <button class="btn-delete" onclick="deleteComment('${comment._id}')">🗑 Eliminar</button>
+      <button class="btn-delete" onclick="deleteComment('${comment._id}', '${postId}')">Eliminar</button>
     `;
     commentsList.appendChild(div);
   });
 }
+
 
 // --- Eliminar comentarios ---
 
@@ -386,13 +387,15 @@ async function loadPostDetail(id) {
 
     const commentsDiv = document.getElementById("comments-list");
     commentsDiv.innerHTML = post.comments.map(c => `
-      <p>
-        <b>${c.user?.username || "Anónimo"}:</b> ${c.content}
-        ${(localStorage.getItem("userId") === c.user?._id || localStorage.getItem("role") === "admin")
-          ? `<button class="btn btn-sm btn-danger ms-2" onclick="deleteComment('${c._id}', '${id}')">Eliminar</button>`
-          : ""}
-      </p>
-    `).join("");
+  <div class="comment-card">
+    <span class="author">${c.user?.username || "Anónimo"}:</span>
+    <span class="text">${c.content}</span>
+    ${(localStorage.getItem("userId") === c.user?._id || localStorage.getItem("role") === "admin")
+      ? `<button class="btn-delete" onclick="deleteComment('${c._id}', '${id}')">🗑 Eliminar</button>`
+      : ""}
+  </div>
+`).join("");
+
 
   } catch (err) {
     console.error("Error al cargar detalle:", err);
