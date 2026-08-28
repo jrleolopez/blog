@@ -201,8 +201,17 @@ main h1::after {
 .post-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: rgb(33, 37, 41);
+  color: rgb(33, 37, 41) !important;;
   margin-bottom: 10px;
+}
+
+.post-title a {
+  color: rgb(33, 37, 41) !important; 
+  text-decoration: none;             
+}
+
+.post-title a:hover {
+  color: rgb(73, 80, 87);
 }
 
 .post-content {
