@@ -292,9 +292,23 @@ async function loadPosts(page = 1) {
       return;
     }
 
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    const role = localStorage.getItem("role");
+
     data.posts.forEach((post) => {
       const div = document.createElement("div");
       div.className = "post-card";
+
+      // --- Construimos acciones dinámicamente ---
+      let actions = "";
+      if (token && token.trim() !== "" && userId && userId.trim() !== "") {
+        actions += `<button class="btn-action btn-like" onclick="likePost('${post._id}')">👍 Like</button>`;
+        actions += `<button class="btn-action btn-share" onclick="sharePost('${post._id}')">🔗 Compartir</button>`;
+      }
+      if (role === "admin" || post.user?._id === userId) {
+        actions += `<button class="btn-action btn-delete" onclick="deletePost('${post._id}')">🗑 Eliminar</button>`;
+      }
 
       div.innerHTML = `
         <img src="${post.image || 'img/default-post.jpg'}" 
@@ -313,18 +327,11 @@ async function loadPosts(page = 1) {
           <span>📅 ${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : ""}</span>
           <span id="likes-${post._id}">❤️ ${post.likes || 0} likes</span>
         </div>
-        <div class="post-actions">
-          <button class="btn-like" onclick="likePost('${post._id}')">👍 Like</button>
-          <button class="btn-share" onclick="sharePost('${post._id}')">🔗 Compartir</button>
-          ${(localStorage.getItem("role") === "admin" || post.user?._id === localStorage.getItem("userId"))
-            ? `<button class="btn-delete" onclick="deletePost('${post._id}')">🗑 Eliminar</button>`
-            : ""}
-        </div>
+        <div class="post-actions">${actions}</div>
       `;
 
       postsDiv.appendChild(div);
     });
-
   } catch (err) {
     console.error("Error en loadPosts:", err);
     showToast("Error al cargar posts", "danger");
