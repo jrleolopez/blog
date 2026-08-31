@@ -48,44 +48,43 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- LOGIN ---
 const loginForm = document.getElementById("loginForm");
-if (loginForm) {
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const identifier = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const identifier = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
-    try {
-      const res = await fetch(`${API}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, password }),
-      });
+      try {
+        const res = await fetch(`${API}/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ identifier, password }),
+        });
 
-      const data = await res.json();
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("userId", data.userId);
-        alert("Login exitoso");
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.role);
+          localStorage.setItem("userId", data.userId);
+          alert("Login exitoso");
 
-        if (data.role === "admin") {
-          window.location.href = "dashboard.html";
+          if (data.role === "admin") {
+            window.location.href = "dashboard.html";
+          } else {
+            window.location.href = "posts.html";
+          }
         } else {
-          window.location.href = "posts.html";
+          alert(data.error || "Error en login");
         }
-      } else {
-        alert(data.error || "Error en login");
+      } catch {
+        alert("Error de conexión con el servidor");
       }
-    } catch {
-      alert("Error de conexión con el servidor");
-    }
-  });
-}
+    });
+  }
 
-// --- CREAR POST ---
-const form = document.getElementById("postForm");
+  const form = document.getElementById("postForm");
+
 if (form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -113,56 +112,54 @@ if (form) {
   });
 }
 
-// --- LISTA DE POSTS ---
-if (document.getElementById("posts")) {
-  loadPosts();
-}
 
-// --- DETALLE DE POST + COMENTARIOS ---
-const params = new URLSearchParams(window.location.search);
-const postId = params.get("id");
+  if (document.getElementById("posts")) loadPosts();
 
-if (postId) {
-  loadPostDetail(postId);
-  toggleCommentForm();
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("id");
+  if (postId) {
+    loadPostDetail(postId);
+    toggleCommentForm(); 
 
-  const commentForm = document.getElementById("commentForm");
-  if (commentForm) {
-    commentForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const text = document.getElementById("commentText").value;
-      const token = localStorage.getItem("token");
+    const commentForm = document.getElementById("commentForm");
+    if (commentForm) {
+      commentForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const text = document.getElementById("commentText").value;
+        const token = localStorage.getItem("token");
 
-      if (!token || token.trim() === "") {
-        showToast("Debes iniciar sesión para comentar.", "warning");
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API}/posts/${postId}/comments`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify({ content: text })
-        });
-
-        const data = await res.json();
-        if (res.status === 201) {
-          document.getElementById("commentText").value = "";
-          loadPostDetail(postId);
-          showToast("Comentario agregado", "success");
-        } else {
-          showToast(data.error || "Error al agregar comentario", "danger");
+        if (!token) {
+          showToast("Debes iniciar sesión para comentar.", "warning");
+          return;
         }
-      } catch {
-        showToast("Error de conexión con el servidor", "danger");
-      }
-    });
-  }
-}
 
+        try {
+          const res = await fetch(`${API}/posts/${postId}/comments`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ content: text })
+          });
+
+          const data = await res.json();
+          if (res.status === 201) {
+            document.getElementById("commentText").value = "";
+            loadPostDetail(postId);
+            showToast("Comentario agregado", "success");
+          } else {
+            showToast(data.error || "Error al agregar comentario", "danger");
+          }
+        } catch {
+          showToast("Error de conexión con el servidor", "danger");
+        }
+      });
+    }
+  }
+});
+
+  
 function renderNavbar() {
   const navLinks = document.getElementById("navLinks");
   if (!navLinks) return;
