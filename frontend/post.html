@@ -1,18 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Detalle del Post</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap utilidades -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Tus estilos personalizados -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="custom-navbar mb-4">
-    <div class="container d-flex justify-content-between align-items-center">
+
+  <nav class="custom-navbar">
+    <div class="navbar-container">
       <a class="navbar-brand" href="index.html">Mi Blog</a>
       <div id="menu-toggle" class="menu-toggle" onclick="toggleMenu()">
         <span></span><span></span><span></span>
@@ -23,37 +20,29 @@
     </div>
   </nav>
 
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="container">
-    <!-- Detalle del Post -->
-    <section class="post-detail-wrapper mb-4">
+  <main class="main-container">
+    <section class="post-detail-wrapper">
       <div id="post-detail" class="post-detail-page">
-        <!-- Aquí se cargará dinámicamente el contenido del post -->
       </div>
     </section>
 
-    <!-- Sección de Comentarios -->
-    <section id="comments-section" class="mt-4">
+    <section id="comments-section" class="comments-section">
       <h4>Comentarios</h4>
-      <div id="comments-list" class="mb-3">
-        <!-- Aquí se renderizan los comentarios -->
+      <div id="comments-list">
       </div>
       <div id="commentFormContainer">
         <form id="commentForm">
-          <textarea id="commentText" class="form-control mb-2" placeholder="Escribe un comentario..." required></textarea>
-          <button type="submit" class="btn btn-form">Comentar</button>
+          <textarea id="commentText" class="form-control" placeholder="Escribe un comentario..." required></textarea>
+          <button type="submit" class="btn-form">Comentar</button>
         </form>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="custom-footer mt-auto">
+  <footer class="custom-footer">
     <small>&copy; 2026 Mi Blog - Desarrollado por Leonardo</small>
   </footer>
 
-  <!-- SCRIPTS -->
   <script src="js/app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
