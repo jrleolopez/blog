@@ -101,8 +101,12 @@ if (form) {
 
       const data = await res.json();
       if (res.status === 201) {
-        showToast("Post creado correctamente", "success");
-        console.log("Post:", data.post);
+  showToast("Post creado correctamente", "success");
+  console.log("Post:", data.post);
+
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 2000);
       } else {
         showToast(data.error || "Error al crear post", "danger");
       }
@@ -307,7 +311,7 @@ async function loadPosts(page = 1) {
         actions += `<button class="btn-action btn-share" onclick="sharePost('${post._id}')">🔗 Compartir</button>`;
       }
       if (role === "admin" || post.user?._id === userId) {
-        actions += `<button class="btn-action btn-delete" onclick="deletePost('${post._id}')">🗑 Eliminar</button>`;
+        actions += `<button class="btn-action btn-delete" onclick="deletePost('${post._id}')">Eliminar</button>`;
       }
 
       div.innerHTML = `
