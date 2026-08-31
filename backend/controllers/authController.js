@@ -1,18 +1,9 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const multer = require("multer");
 
-// Configuración de subida de avatar
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/avatars");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
-});
-const upload = multer({ storage });
+// Importar configuración de Cloudinary
+const { upload } = require("../config/cloudinary");
 
 // Registro directo sin verificación por correo
 exports.register = async (req, res) => {
@@ -32,16 +23,11 @@ exports.register = async (req, res) => {
       return res.status(400).json({ error: "La contraseña debe tener mínimo 8 caracteres, incluir mayúscula, minúscula, número y símbolo." });
     }
 
-    // Validar duplicados
     const existingEmail = await User.findOne({ email });
-    if (existingEmail) {
-      return res.status(409).json({ error: "El correo ya está registrado" });
-    }
+    if (existingEmail) return res.status(409).json({ error: "El correo ya está registrado" });
 
     const existingUsername = await User.findOne({ username });
-    if (existingUsername) {
-      return res.status(409).json({ error: "El nombre de usuario ya está en uso" });
-    }
+    if (existingUsername) return res.status(409).json({ error: "El nombre de usuario ya está en uso" });
 
     const hashed = await bcrypt.hash(password, 10);
     const user = new User({
@@ -54,7 +40,6 @@ exports.register = async (req, res) => {
     });
 
     await user.save();
-
     res.status(201).json({ message: "Usuario registrado correctamente" });
   } catch (error) {
     if (error.code === 11000) {
@@ -64,36 +49,19 @@ exports.register = async (req, res) => {
   }
 };
 
-// Login directo sin verificación de correo
+// Login
 exports.login = async (req, res) => {
   try {
-    const { identifier, password } = req.body; 
-    // "identifier" puede ser email o username
-
-    // Buscar por email o username
-    const user = await User.findOne({
-      $or: [{ email: identifier }, { username: identifier }]
-    });
+    const { identifier, password } = req.body;
+    const user = await User.findOne({ $or: [{ email: identifier }, { username: identifier }] });
     if (!user) return res.status(400).json({ error: "Usuario no encontrado" });
 
-    // Validar contraseña
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ error: "Contraseña incorrecta" });
 
-    // Generar token JWT
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.SECRET, { expiresIn: "1h" });
 
-    // Responder con token y datos básicos
-    res.json({
-      token,
-      role: user.role,
-      userId: user._id,
-      username: user.username
-    });
+    res.json({ token, role: user.role, userId: user._id, username: user.username });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -110,43 +78,28 @@ exports.getProfile = async (req, res) => {
   }
 };
 
-// Actualizar perfil
-exports.updateProfile = async (req, res) => {
-  try {
-    const { bio, avatar } = req.body;
-    const user = await User.findById(req.user._id);
-    if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
-
-    if (bio !== undefined) user.bio = bio;
-    if (avatar !== undefined) user.avatar = avatar;
-
-    await user.save();
-    res.json({
-      message: "Perfil actualizado",
-      bio: user.bio,
-      avatar: user.avatar
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Actualizar perfil con subida de avatar
+// Actualizar perfil con subida de avatar a Cloudinary
 exports.updateProfileWithAvatar = [
   upload.single("avatar"),
   async (req, res) => {
     try {
+
+      console.log("req.file:", req.file);
+      console.log("req.body:", req.body);
+      
       const user = await User.findById(req.user._id);
       if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
       if (req.body.bio !== undefined) user.bio = req.body.bio;
-      if (req.file) user.avatar = `/uploads/avatars/${req.file.filename}`;
+      if (req.file) user.avatar = req.file.path; 
 
       await user.save();
       res.json({
         message: "Perfil actualizado correctamente",
         bio: user.bio,
         avatar: user.avatar
+
+        
       });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -173,7 +126,7 @@ exports.updateRole = async (req, res) => {
   }
 };
 
-// Listar todos los usuarios (solo admin)
+// Listar usuarios (solo admin)
 exports.getUsers = async (req, res) => {
   try {
     if (!req.user || req.user.role !== "admin") {
@@ -202,4 +155,3 @@ exports.deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-

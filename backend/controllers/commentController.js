@@ -4,7 +4,7 @@ const Post = require("../models/Post");
 // Crear comentario
 exports.createComment = async (req, res) => {
   try {
-    const { content } = req.body; // 👈 usar "content" en lugar de "text"
+    const { content } = req.body; 
     const post = await Post.findById(req.params.postId);
     if (!post) return res.status(404).json({ error: "Post no encontrado" });
 
@@ -15,7 +15,7 @@ exports.createComment = async (req, res) => {
     });
 
     await comment.save();
-    post.comments.push(comment._id); // 👈 vincular al post
+    post.comments.push(comment._id); 
     await post.save();
 
     res.status(201).json(comment);
