@@ -49,42 +49,41 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const identifier = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+if (loginForm) {
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const identifier = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-      try {
-        const res = await fetch(`${API}/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ identifier, password }),
-        });
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ identifier, password }),
+      });
 
-        const data = await res.json();
-        if (data.token) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("role", data.role);
-          localStorage.setItem("userId", data.userId);
-          alert("Login exitoso");
+      const data = await res.json();
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("userId", data.userId);
+        alert("Login exitoso");
 
-          if (data.role === "admin") {
-            window.location.href = "dashboard.html";
-          } else {
-            window.location.href = "posts.html";
-          }
+        if (data.role === "admin") {
+          window.location.href = "dashboard.html";
         } else {
-          alert(data.error || "Error en login");
+          window.location.href = "posts.html";
         }
-      } catch {
-        alert("Error de conexión con el servidor");
+      } else {
+        alert(data.error || "Error en login");
       }
-    });
-  }
+    } catch {
+      alert("Error de conexión con el servidor");
+    }
+  });
+}
 
-  const form = document.getElementById("postForm");
-
+const form = document.getElementById("postForm");
 if (form) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -112,52 +111,51 @@ if (form) {
   });
 }
 
+if (document.getElementById("posts")) loadPosts();
 
-  if (document.getElementById("posts")) loadPosts();
+const params = new URLSearchParams(window.location.search);
+const postId = params.get("id");
+if (postId) {
+  loadPostDetail(postId);
+  toggleCommentForm(); 
 
-  const params = new URLSearchParams(window.location.search);
-  const postId = params.get("id");
-  if (postId) {
-    loadPostDetail(postId);
-    toggleCommentForm(); 
+  const commentForm = document.getElementById("commentForm");
+  if (commentForm) {
+    commentForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = document.getElementById("commentText").value;
+      const token = localStorage.getItem("token");
 
-    const commentForm = document.getElementById("commentForm");
-    if (commentForm) {
-      commentForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const text = document.getElementById("commentText").value;
-        const token = localStorage.getItem("token");
+      if (!token || token.trim() === "") {
+        showToast("Debes iniciar sesión para comentar.", "warning");
+        return;
+      }
 
-        if (!token) {
-          showToast("Debes iniciar sesión para comentar.", "warning");
-          return;
+      try {
+        const res = await fetch(`${API}/posts/${postId}/comments`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ content: text })
+        });
+
+        const data = await res.json();
+        if (res.status === 201) {
+          document.getElementById("commentText").value = "";
+          loadPostDetail(postId);
+          showToast("Comentario agregado", "success");
+        } else {
+          showToast(data.error || "Error al agregar comentario", "danger");
         }
-
-        try {
-          const res = await fetch(`${API}/posts/${postId}/comments`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({ content: text })
-          });
-
-          const data = await res.json();
-          if (res.status === 201) {
-            document.getElementById("commentText").value = "";
-            loadPostDetail(postId);
-            showToast("Comentario agregado", "success");
-          } else {
-            showToast(data.error || "Error al agregar comentario", "danger");
-          }
-        } catch {
-          showToast("Error de conexión con el servidor", "danger");
-        }
-      });
-    }
+      } catch {
+        showToast("Error de conexión con el servidor", "danger");
+      }
+    });
   }
-});
+}
+
 
 function renderNavbar() {
   const navLinks = document.getElementById("navLinks");
@@ -327,27 +325,6 @@ async function loadPosts(page = 1) {
   } catch (err) {
     console.error("Error en loadPosts:", err);
     showToast("Error al cargar posts", "danger");
-  }
-}
-
-async function loadPostDetail(id) {
-  try {
-    const res = await fetch(`${API}/posts/${id}`);
-    const post = await res.json();
-
-    const detailDiv = document.getElementById("post-detail");
-    detailDiv.innerHTML = `
-      <img src="${post.image || defaultImage}" 
-           alt="Imagen destacada" class="detail-img">
-      <h2 class="post-title">${post.title}</h2>
-      <span class="post-category">${post.category}</span>
-      <p class="post-content">${post.content}</p>
-      <div class="post-meta">👤 ${post.user?.username || "Desconocido"}</div>
-      <div class="post-meta">📅 ${new Date(post.createdAt).toLocaleDateString()}</div>
-    `;
-  } catch (err) {
-    console.error("Error al cargar detalle:", err);
-    showToast("Error al cargar detalle del post", "danger");
   }
 }
 
