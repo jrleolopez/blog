@@ -364,7 +364,7 @@ async function loadPostDetail(id) {
         <span class="author">${c.user?.username || "Anónimo"}:</span>
         <span class="text">${c.content}</span>
         ${(localStorage.getItem("userId") === c.user?._id || localStorage.getItem("role") === "admin")
-          ? `<button class="btn-delete" onclick="deleteComment('${c._id}', '${id}')">🗑 Eliminar</button>`
+          ? `<button class="btn-delete" onclick="deleteComment('${c._id}', '${id}')">Eliminar</button>`
           : ""}
       </div>
     `).join("");
