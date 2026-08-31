@@ -19,7 +19,7 @@ router.post("/login", login);
 
 // Perfil
 router.get("/profile", protect, getProfile);
-router.put("/profile", protect, ...updateProfileWithAvatar); // 👈 CORREGIDO
+router.put("/profile", protect, updateProfileWithAvatar);
 
 // Roles
 router.put("/:id/role", protect, updateRole);

@@ -1,19 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const protect = require("../middleware/authMiddleware");
-const multer = require("multer");
 const Post = require("../models/Post");
-
-// Configuración de multer (subidas a carpeta uploads/)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // carpeta donde se guardan las imágenes
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname); // nombre único
-  }
-});
-const upload = multer({ storage });
+const { upload } = require("../config/cloudinary"); 
 
 const {
   createPost,
@@ -23,7 +12,14 @@ const {
 } = require("../controllers/postController");
 
 // Crear post con imagen (FormData)
-router.post("/", protect, upload.single("image"), createPost);
+router.post("/", protect, (req, res, next) => {
+  upload.single("image")(req, res, function (err) {
+    if (err && err.message !== "Unexpected end of form") {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  });
+}, createPost);
 
 // Obtener posts con paginación
 router.get("/", getPosts);
