@@ -110,7 +110,7 @@ exports.deletePost = async (req, res) => {
     }
 
     await post.deleteOne();
-    res.json({ message: "Post eliminado y su imagen borrada de Cloudinary" });
+    res.json({ message: "Post eliminado correctamente"});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
