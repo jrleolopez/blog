@@ -293,37 +293,37 @@ async function loadPosts(page = 1) {
     }
 
     data.posts.forEach((post) => {
-  const div = document.createElement("div");
-  div.className = "post-card";
+      const div = document.createElement("div");
+      div.className = "post-card";
 
-  div.innerHTML = `
-    <img src="${post.image || 'img/default-post.jpg'}" 
-         alt="Imagen destacada" class="post-img">
-    <h3 class="post-title">
-      <a href="post.html?id=${post._id}">${post.title}</a>
-    </h3>
-    <span class="post-category">${post.category || "General"}</span>
-    <p class="post-content">
-      ${(post.content && post.content.length > 120) 
-        ? post.content.substring(0, 120) + "..." 
-        : post.content || ""}
-    </p>
-    <div class="post-meta">
-      <span>👤 ${post.user?.username || "Desconocido"}</span>
-      <span>📅 ${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : ""}</span>
-      <span id="likes-${post._id}">❤️ ${post.likes || 0} likes</span>
-    </div>
-    <div class="post-actions">
-      <button class="btn-like" onclick="likePost('${post._id}')">👍 Like</button>
-      <button class="btn-share" onclick="sharePost('${post._id}')">🔗 Compartir</button>
-      ${(localStorage.getItem("role") === "admin" || post.user?._id === localStorage.getItem("userId"))
-        ? `<button class="btn-delete" onclick="deletePost('${post._id}')">🗑 Eliminar</button>`
-        : ""}
-    </div>
-  `;
+      div.innerHTML = `
+        <img src="${post.image || 'img/default-post.jpg'}" 
+             alt="Imagen destacada" class="post-img">
+        <h3 class="post-title">
+          <a href="post.html?id=${post._id}">${post.title}</a>
+        </h3>
+        <span class="post-category">${post.category || "General"}</span>
+        <p class="post-content">
+          ${(post.content && post.content.length > 120) 
+            ? post.content.substring(0, 120) + "..." 
+            : post.content || ""}
+        </p>
+        <div class="post-meta">
+          <span>👤 ${post.user?.username || "Desconocido"}</span>
+          <span>📅 ${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : ""}</span>
+          <span id="likes-${post._id}">❤️ ${post.likes || 0} likes</span>
+        </div>
+        <div class="post-actions">
+          <button class="btn-like" onclick="likePost('${post._id}')">👍 Like</button>
+          <button class="btn-share" onclick="sharePost('${post._id}')">🔗 Compartir</button>
+          ${(localStorage.getItem("role") === "admin" || post.user?._id === localStorage.getItem("userId"))
+            ? `<button class="btn-delete" onclick="deletePost('${post._id}')">🗑 Eliminar</button>`
+            : ""}
+        </div>
+      `;
 
-  postsDiv.appendChild(div);
-});
+      postsDiv.appendChild(div);
+    });
 
   } catch (err) {
     console.error("Error en loadPosts:", err);
