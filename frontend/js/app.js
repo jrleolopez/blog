@@ -153,9 +153,6 @@ if (postId) {
         showToast("Error de conexión con el servidor", "danger");
       }
     });
-  }
-}
-
 
 function renderNavbar() {
   const navLinks = document.getElementById("navLinks");
@@ -354,27 +351,6 @@ async function loadPostDetail(id) {
           : ""}
       </div>
     `).join("");
-  } catch (err) {
-    console.error("Error al cargar detalle:", err);
-    showToast("Error al cargar detalle del post", "danger");
-  }
-}
-  
-async function loadPostDetail(id) {
-  try {
-    const res = await fetch(`${API}/posts/${id}`);
-    const post = await res.json();
-
-    const detailDiv = document.getElementById("post-detail");
-    detailDiv.innerHTML = `
-      <img src="${post.image || defaultImage}" 
-           alt="Imagen destacada" class="detail-img">
-      <h2 class="post-title">${post.title}</h2>
-      <span class="post-category">${post.category}</span>
-      <p class="post-content">${post.content}</p>
-      <div class="post-meta">👤 ${post.user?.username || "Desconocido"}</div>
-      <div class="post-meta">📅 ${new Date(post.createdAt).toLocaleDateString()}</div>
-    `;
   } catch (err) {
     console.error("Error al cargar detalle:", err);
     showToast("Error al cargar detalle del post", "danger");
