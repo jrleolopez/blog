@@ -359,8 +359,28 @@ async function loadPostDetail(id) {
     showToast("Error al cargar detalle del post", "danger");
   }
 }
+  
+async function loadPostDetail(id) {
+  try {
+    const res = await fetch(`${API}/posts/${id}`);
+    const post = await res.json();
 
-
+    const detailDiv = document.getElementById("post-detail");
+    detailDiv.innerHTML = `
+      <img src="${post.image || defaultImage}" 
+           alt="Imagen destacada" class="detail-img">
+      <h2 class="post-title">${post.title}</h2>
+      <span class="post-category">${post.category}</span>
+      <p class="post-content">${post.content}</p>
+      <div class="post-meta">👤 ${post.user?.username || "Desconocido"}</div>
+      <div class="post-meta">📅 ${new Date(post.createdAt).toLocaleDateString()}</div>
+    `;
+  } catch (err) {
+    console.error("Error al cargar detalle:", err);
+    showToast("Error al cargar detalle del post", "danger");
+  }
+}
+  
 async function likePost(id) {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
