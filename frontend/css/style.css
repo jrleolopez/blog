@@ -308,11 +308,11 @@ main {
   transition: all 0.2s ease-in-out;
 }
 
-#users .btn-revert {
+#users .btn-user {
   background-color: #198754;
   color: #fff;
 }
-#users .btn-revert:hover {
+#users .btn-user:hover {
   background-color: #157347;
 }
 
