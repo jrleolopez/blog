@@ -561,8 +561,8 @@ async function loadUsers() {
               <td>${user.role}</td>
               <td>
                 ${user.role === "admin"
-                  ? `<button class="btn-user" onclick="updateUserRole('${user._id}', 'user')">Revertir a Usuario</button>`
-                  : `<button class="btn-user" onclick="updateUserRole('${user._id}', 'admin')">Administrador</button>`}
+                  ? `<button class="btn-revert" onclick="updateUserRole('${user._id}', 'user')">Revertir a Usuario</button>`
+                  : `<button class="btn-revert" onclick="updateUserRole('${user._id}', 'admin')">Administrador</button>`}
                 <button class="btn-delete" onclick="deleteUser('${user._id}')">Eliminar</button>
               </td>
             </tr>
