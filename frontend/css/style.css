@@ -308,14 +308,6 @@ main {
   transition: all 0.2s ease-in-out;
 }
 
-#users .btn-user {
-  background-color: #198754;
-  color: #fff;
-}
-#users .btn-user:hover {
-  background-color: #157347;
-}
-
 #users .btn-delete {
   background-color: #dc3545;
   color: #fff;
