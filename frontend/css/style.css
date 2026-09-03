@@ -388,6 +388,7 @@ main {
 }
 .post-content {
   font-size: 1rem;
+  white-space: pre-line;
   color: #444;
   line-height: 1.6;
   margin-bottom: 15px;
