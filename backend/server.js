@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
+const vehicleRoutes = require("./routes/vehicleRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/vehicles", vehicleRoutes);
 app.use("/api", commentRoutes);
 
 connectDB();
