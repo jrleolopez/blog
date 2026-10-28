@@ -72,7 +72,7 @@ const loginForm = document.getElementById("loginForm");
           if (data.role === "admin") {
             window.location.href = "dashboard.html";
           } else {
-            window.location.href = "posts.html";
+            window.location.href = "vehicles.html";
           }
         } else {
           alert(data.error || "Error en login");
@@ -83,17 +83,17 @@ const loginForm = document.getElementById("loginForm");
     });
   }
 
-  const form = document.getElementById("postForm");
+  const carForm = document.getElementById("carForm");
 
-if (form) {
-  form.addEventListener("submit", async (e) => {
+if (carForm) {
+  carForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(form);
+    const formData = new FormData(carForm);
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("/api/posts", {
+      const res = await fetch(`${API}/vehicles`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData
@@ -101,14 +101,15 @@ if (form) {
 
       const data = await res.json();
       if (res.status === 201) {
-  showToast("Post creado correctamente", "success");
-  console.log("Post:", data.post);
+        showToast("Vehículo publicado correctamente", "success");
+        console.log("Vehicle:", data.vehicle);
 
-  setTimeout(() => {
-    window.location.href = "index.html";
-  }, 2000);
+        // Redirige al index después de 2 segundos
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
       } else {
-        showToast(data.error || "Error al crear post", "danger");
+        showToast(data.error || "Error al publicar vehículo", "danger");
       }
     } catch (err) {
       showToast("Error de conexión con el servidor", "danger");
@@ -116,13 +117,12 @@ if (form) {
   });
 }
 
-
-  if (document.getElementById("posts")) loadPosts();
+  if (document.getElementById("posts")) loadVehicles();
 
   const params = new URLSearchParams(window.location.search);
-  const postId = params.get("id");
-  if (postId) {
-    loadPostDetail(postId);
+  const vehicleId = params.get("id");
+  if (vehicleId) {
+  loadVehicleDetail(vehicleId);
     toggleCommentForm(); 
 
     const commentForm = document.getElementById("commentForm");
@@ -138,7 +138,7 @@ if (form) {
         }
 
         try {
-          const res = await fetch(`${API}/posts/${postId}/comments`, {
+          const res = await fetch(`${API}/vehicles/${vehicleId}/comments`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -150,7 +150,7 @@ if (form) {
           const data = await res.json();
           if (res.status === 201) {
             document.getElementById("commentText").value = "";
-            loadPostDetail(postId);
+            loadVehicleDetail(vehicleId);
             showToast("Comentario agregado", "success");
           } else {
             showToast(data.error || "Error al agregar comentario", "danger");
@@ -162,6 +162,174 @@ if (form) {
     }
   }
 });
+
+async function loadVehicles(page = 1) {
+  try {
+
+    const res = await fetch(
+      `${API}/vehicles?page=${page}&limit=12`
+    );
+
+    const data = await res.json();
+
+    const container = document.getElementById("posts");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (!data.vehicles) return;
+
+    data.vehicles.forEach(vehicle => {
+
+      const card = document.createElement("div");
+
+      card.className = "post-card";
+
+      card.innerHTML = `
+        <img
+          src="${vehicle.image || 'img/default-car.jpg'}"
+          alt="${vehicle.title}"
+          class="post-img"
+        >
+
+        <h3>
+          <a href="vehicle.html?id=${vehicle._id}">
+            ${vehicle.title}
+          </a>
+        </h3>
+
+        <p><strong>Marca:</strong> ${vehicle.brand}</p>
+
+        <p><strong>Modelo:</strong> ${vehicle.model}</p>
+
+        <p><strong>Año:</strong> ${vehicle.year}</p>
+
+        <p><strong>Precio:</strong>
+          $${Number(vehicle.price).toLocaleString()}
+        </p>
+
+        <p><strong>Ciudad:</strong> ${vehicle.city}</p>
+
+        <p><strong>Km:</strong>
+          ${Number(vehicle.mileage).toLocaleString()}
+        </p>
+
+        <p><strong>Estado:</strong>
+          ${vehicle.status}
+        </p>
+      `;
+
+      container.appendChild(card);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Error cargando vehículos",
+      "danger"
+    );
+
+  }
+}
+
+async function loadVehicleDetail(id) {
+  try {
+
+    const res = await fetch(
+      `${API}/vehicles/${id}`
+    );
+
+    const vehicle = await res.json();
+
+    const container =
+      document.getElementById("vehicle-detail");
+
+    if (!container) return;
+
+    container.innerHTML = `
+      <img
+        src="${vehicle.image}"
+        class="detail-img"
+        alt="${vehicle.title}"
+      >
+
+      <h2>${vehicle.title}</h2>
+
+      <p>
+        <strong>Marca:</strong>
+        ${vehicle.brand}
+      </p>
+
+      <p>
+        <strong>Modelo:</strong>
+        ${vehicle.model}
+      </p>
+
+      <p>
+        <strong>Año:</strong>
+        ${vehicle.year}
+      </p>
+
+      <p>
+        <strong>Precio:</strong>
+        $${Number(vehicle.price).toLocaleString()}
+      </p>
+
+      <p>
+        <strong>Kilometraje:</strong>
+        ${Number(vehicle.mileage).toLocaleString()} km
+      </p>
+
+      <p>
+        <strong>Ciudad:</strong>
+        ${vehicle.city}
+      </p>
+
+      <p>
+        <strong>Estado:</strong>
+        ${vehicle.status}
+      </p>
+
+      <p>
+        <strong>Visitas:</strong>
+        ${vehicle.views}
+      </p>
+
+      <p class="post-content">
+        ${vehicle.description}
+      </p>
+
+      <a
+        href="https://wa.me/57${vehicle.whatsapp}"
+        target="_blank"
+        class="btn-form"
+      >
+        Contactar por WhatsApp
+      </a>
+    `;
+
+    if (vehicle.comments) {
+      renderComments(
+        vehicle.comments,
+        vehicle._id
+      );
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Error cargando vehículo",
+      "danger"
+    );
+
+  }
+}
 
   
 function renderNavbar() {
@@ -175,7 +343,7 @@ function renderNavbar() {
     navLinks.innerHTML = `
       <li><a class="nav-link" href="index.html">Inicio</a></li>
       ${role === "admin" ? `<li><a class="nav-link" href="dashboard.html">Dashboard</a></li>` : ""}
-      <li><a class="nav-link" href="posts.html">Posts</a></li>
+      <li><a class="nav-link" href="vehicles.html">Vehículos</a></li>
       <li><a class="nav-link" href="profile.html">Perfil</a></li>
       <li><a class="nav-link" href="#" onclick="logout()">Salir</a></li>
     `;
@@ -216,14 +384,6 @@ function showToast(message, type = "info") {
   }, 3000);
 }
 
-function createToastContainer() {
-  const container = document.createElement("div");
-  container.id = "toastContainer";
-  container.className = "toast-container";
-  document.body.appendChild(container);
-  return container;
-}
-
 function toggleCommentForm() {
   const token = localStorage.getItem("token");
   const formContainer = document.getElementById("commentFormContainer");
@@ -238,7 +398,7 @@ function toggleCommentForm() {
 }
 
 
-function renderComments(comments, postId) {
+function renderComments(comments, vehicleId) {
   const commentsList = document.getElementById("comments-list");
   commentsList.innerHTML = "";
 
@@ -248,13 +408,13 @@ function renderComments(comments, postId) {
     div.innerHTML = `
       <span class="author">${comment.user?.username || "Anónimo"}:</span>
       <span class="text">${comment.text}</span>
-      <button class="btn-delete" onclick="deleteComment('${comment._id}', '${postId}')">Eliminar</button>
+      <button class="btn-delete" onclick="deleteComment('${comment._id}', '${vehicleId}')">Eliminar</button>
     `;
     commentsList.appendChild(div);
   });
 }
 
-async function deleteComment(commentId, postId) {
+async function deleteComment(commentId, vehicleId) {
   const token = localStorage.getItem("token");
   if (!token) {
     showToast("Debes iniciar sesión para eliminar comentarios.", "warning");
@@ -272,7 +432,7 @@ async function deleteComment(commentId, postId) {
     const data = await res.json();
     if (res.status === 200) {
       showToast(data.message, "success");
-      loadPostDetail(postId);
+      loadVehicleDetail(vehicleId);
     } else {
       showToast(data.error || "Error al eliminar comentario", "danger");
     }
@@ -283,185 +443,12 @@ async function deleteComment(commentId, postId) {
 
 const defaultImage = "https://res.cloudinary.com/tu_cloud/image/upload/v1234567890/default-post.jpg";
 
-async function loadPosts(page = 1) {
-  try {
-    const res = await fetch(`${API}/posts?page=${page}&limit=5`);
-    const data = await res.json();
-
-    const postsDiv = document.getElementById("posts");
-    postsDiv.innerHTML = "";
-
-    if (!data.posts || !Array.isArray(data.posts)) {
-      postsDiv.innerHTML = `<div class="custom-alert">No hay posts disponibles.</div>`;
-      return;
-    }
-
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    const role = localStorage.getItem("role");
-
-    data.posts.forEach((post) => {
-      const div = document.createElement("div");
-      div.className = "post-card";
-
-      // --- Construimos acciones dinámicamente ---
-      let actions = "";
-      if (token && token.trim() !== "" && userId && userId.trim() !== "") {
-        actions += `<button class="btn-action btn-like" onclick="likePost('${post._id}')">👍 Like</button>`;
-        actions += `<button class="btn-action btn-share" onclick="sharePost('${post._id}')">🔗 Compartir</button>`;
-      }
-      if (role === "admin" || post.user?._id === userId) {
-        actions += `<button class="btn-action btn-delete" onclick="deletePost('${post._id}')">Eliminar</button>`;
-      }
-
-      div.innerHTML = `
-        <img src="${post.image || 'img/default-post.jpg'}" 
-             alt="Imagen destacada" class="post-img">
-        <h3 class="post-title">
-          <a href="post.html?id=${post._id}">${post.title}</a>
-        </h3>
-        <span class="post-category">${post.category || "General"}</span>
-        <p class="post-content">
-          ${(post.content && post.content.length > 120) 
-            ? post.content.substring(0, 120) + "..." 
-            : post.content || ""}
-        </p>
-        <div class="post-meta">
-          <span>👤 ${post.user?.username || "Desconocido"}</span>
-          <span>📅 ${post.createdAt ? new Date(post.createdAt).toLocaleDateString() : ""}</span>
-          <span id="likes-${post._id}">❤️ ${post.likes || 0} likes</span>
-        </div>
-        <div class="post-actions">${actions}</div>
-      `;
-
-      postsDiv.appendChild(div);
-    });
-  } catch (err) {
-    console.error("Error en loadPosts:", err);
-    showToast("Error al cargar posts", "danger");
-  }
-}
-
-async function loadPostDetail(id) {
-  try {
-    const res = await fetch(`${API}/posts/${id}`);
-    const post = await res.json();
-
-    const detailDiv = document.getElementById("post-detail");
-    detailDiv.innerHTML = `
-      <img src="${post.image || 'img/default-post.jpg'}" 
-           alt="Imagen destacada" class="detail-img">
-      <h2 class="post-title">${post.title}</h2>
-      <span class="post-category">${post.category}</span>
-      <p class="post-content">${post.content}</p>
-      <div class="post-meta">👤 ${post.user?.username || "Desconocido"}</div>
-      <div class="post-meta">📅 ${new Date(post.createdAt).toLocaleDateString()}</div>
-    `;
-
-    const commentsDiv = document.getElementById("comments-list");
-    commentsDiv.innerHTML = post.comments.map(c => `
-      <div class="comment-card">
-        <span class="author">${c.user?.username || "Anónimo"}:</span>
-        <span class="text">${c.content}</span>
-        ${(localStorage.getItem("userId") === c.user?._id || localStorage.getItem("role") === "admin")
-          ? `<button class="btn-delete" onclick="deleteComment('${c._id}', '${id}')">Eliminar</button>`
-          : ""}
-      </div>
-    `).join("");
-  } catch (err) {
-    console.error("Error al cargar detalle:", err);
-    showToast("Error al cargar detalle del post", "danger");
-  }
-}
-  
-async function likePost(id) {
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
-
-  if (!token || !userId) {
-    showToast("Debes iniciar sesión para dar like.", "warning");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/posts/${id}/like`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ userId })
-    });
-
-    const data = await res.json();
-    if (res.status === 200) {
-      const likesSpan = document.getElementById(`likes-${id}`);
-      if (likesSpan) likesSpan.textContent = `❤️ ${data.likes} likes`;
-      showToast("Like registrado", "success");
-    } else {
-      showToast(data.error || "Error al dar like", "danger");
-    }
-  } catch (err) {
-    showToast("Error de conexión con el servidor", "danger");
-  }
-}
-
-function sharePost(id) {
-  const url = `${window.location.origin}/post.html?id=${id}`;
-  navigator.clipboard.writeText(url).then(() => {
-    showToast("Enlace copiado al portapapeles", "info");
-  });
-}
-
-function savePost(id) {
-  showToast("Post guardado en favoritos", "success");
-}
-
-function showToast(message, type = "info") {
-  const toastContainer = document.getElementById("toastContainer") || createToastContainer();
-  const toast = document.createElement("div");
-  toast.className = `custom-toast ${type}`;
-  toast.innerHTML = `
-    <span class="toast-message">${message}</span>
-    <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-  `;
-  toastContainer.appendChild(toast);
-
-  setTimeout(() => {
-    if (toast.parentElement) toast.remove();
-  }, 3000);
-}
-
 function createToastContainer() {
   const container = document.createElement("div");
   container.id = "toastContainer";
   container.className = "toast-container";
   document.body.appendChild(container);
   return container;
-}
-
-async function deletePost(id) {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    showToast("Debes iniciar sesión para eliminar un post.", "warning");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/posts/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const data = await res.json();
-    if (res.status === 200) {
-      showToast(data.message, "success");
-      loadPosts();
-    } else {
-      showToast(data.error || "Error al eliminar post", "danger");
-    }
-  } catch {
-    showToast("Error de conexión con el servidor", "danger");
-  }
 }
 
 async function loadProfile() {
