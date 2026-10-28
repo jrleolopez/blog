@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle del Vehículo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <nav class="custom-navbar">
+    <div class="navbar-container">
+
+      <a class="navbar-brand" href="index.html">
+        AutoMarket
+      </a>
+
+      <div id="menu-toggle"
+           class="menu-toggle"
+           onclick="toggleMenu()">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </div>
+
+      <div id="menu" class="navbar-collapse">
+        <ul id="navLinks" class="navbar-nav"></ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="main-container">
+
+    <section class="post-detail-wrapper">
+
+      <div id="vehicle-detail"
+           class="post-detail-page">
+
+      </div>
+
+    </section>
+
+    <section id="comments-section"
+             class="comments-section">
+
+      <h4>Preguntas sobre el vehículo</h4>
+
+      <div id="comments-list"></div>
+
+      <div id="commentFormContainer">
+
+        <form id="commentForm">
+
+          <textarea
+            id="commentText"
+            class="form-control"
+            placeholder="Haz una pregunta al vendedor..."
+            required>
+          </textarea>
+
+          <button
+            type="submit"
+            class="btn-form">
+
+            Enviar Pregunta
+
+          </button>
+
+        </form>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="custom-footer">
+    <small>
+      © 2026 AutoMarket - Desarrollado por Leonardo
+    </small>
+  </footer>
+
+  <script src="js/app.js"></script>
+
+</body>
+</html>

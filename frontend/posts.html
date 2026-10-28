@@ -2,7 +2,7 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Crear nuevo post</title>
+    <title>Publicar vehículo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Tus estilos personalizados -->
     <link rel="stylesheet" href="css/style.css" />
@@ -11,7 +11,7 @@
     <!-- NAVBAR -->
     <nav class="custom-navbar">
       <div class="navbar-container">
-        <a class="navbar-brand" href="index.html">Mi Blog</a>
+        <a class="navbar-brand" href="index.html">AutoMarket</a>
         <div id="menu-toggle" class="menu-toggle" onclick="toggleMenu()">
           <span></span><span></span><span></span>
         </div>
@@ -24,64 +24,136 @@
     <main class="main-container centered-container">
       <div class="form-card register-post">
         <div class="card-header custom-card-header">
-          <h4>Crear nuevo post</h4>
+          <h4>Publicar vehículo</h4>
         </div>
         <div class="card-body">
-          <form id="postForm">
-            <div class="form-group">
-              <label for="title">Título</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                class="form-control"
-                placeholder="Título"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="category">Categoría</label>
-              <select
-                id="category"
-                name="category"
-                class="form-control"
-                required
-              >
-                <option value="">Selecciona una categoría</option>
-                <option value="Tecnología">Tecnología</option>
-                <option value="Noticias">Noticias</option>
-                <option value="Tutorial">Tutorial</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="image">Imagen destacada</label>
-              <input
-                type="file"
-                id="image"
-                name="image"
-                class="form-control"
-                accept="image/*"
-              />
-            </div>
-            <div class="form-group">
-              <label for="content">Contenido</label>
-              <textarea
-                id="content"
-                name="content"
-                class="form-control"
-                placeholder="Contenido"
-                rows="4"
-                required
-              ></textarea>
-            </div>
-            <button type="submit" class="btn-form">Publicar</button>
-          </form>
+          <form id="carForm" enctype="multipart/form-data">
+
+  <div class="form-group">
+    <label for="title">Título del anuncio</label>
+    <input
+      type="text"
+      id="title"
+      name="title"
+      class="form-control"
+      placeholder="Ej: Toyota Corolla XEI 2021"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="brand">Marca</label>
+    <input
+      type="text"
+      id="brand"
+      name="brand"
+      class="form-control"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="model">Modelo</label>
+    <input
+      type="text"
+      id="model"
+      name="model"
+      class="form-control"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="year">Año</label>
+    <input
+      type="number"
+      id="year"
+      name="year"
+      class="form-control"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="mileage">Kilometraje</label>
+    <input
+      type="number"
+      id="mileage"
+      name="mileage"
+      class="form-control"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="price">Precio</label>
+    <input
+      type="number"
+      id="price"
+      name="price"
+      class="form-control"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="city">Ciudad</label>
+    <input
+      type="text"
+      id="city"
+      name="city"
+      class="form-control"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="whatsapp">WhatsApp</label>
+    <input
+      type="text"
+      id="whatsapp"
+      name="whatsapp"
+      class="form-control"
+      placeholder="3001234567"
+      required
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="description">Descripción</label>
+    <textarea
+      id="description"
+      name="description"
+      class="form-control"
+      rows="6"
+      required
+    ></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="image">Foto principal</label>
+    <input
+      type="file"
+      id="image"
+      name="image"
+      class="form-control"
+      accept="image/*"
+      required
+    >
+  </div>
+
+  <button type="submit" class="btn-form">
+    Publicar Vehículo
+  </button>
+
+</form>
+
         </div>
       </div>
     </main>
 
     <footer class="custom-footer">
-      <small>&copy; 2026 Mi Blog - Desarrollado por Leonardo</small>
+      <small>&copy; 2026 AutoMarket - Desarrollado por Leonardo</small>
     </footer>
 
     <script src="js/app.js"></script>

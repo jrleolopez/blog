@@ -1,40 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Mi Blog</title>
+  <title>AutoMarket</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+
   <nav class="custom-navbar">
     <div class="navbar-container">
-      <a class="navbar-brand" href="index.html">Mi Blog</a>
-      <div id="menu-toggle" class="menu-toggle" onclick="toggleMenu()">
-        <span></span><span></span><span></span>
+
+      <a class="navbar-brand" href="index.html">
+        AutoMarket
+      </a>
+
+      <div id="menu-toggle"
+           class="menu-toggle"
+           onclick="toggleMenu()">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
       </div>
+
       <div id="menu" class="navbar-collapse">
         <ul id="navLinks" class="navbar-nav"></ul>
       </div>
+
     </div>
   </nav>
 
   <main class="main-container">
-    <h1>Posts recientes</h1>
-    <div id="posts"></div>
-    <div id="pagination"></div>
+
+    <section class="hero-section">
+
+      <h1>🚗 Marketplace de Vehículos</h1>
+
+      <p>
+        Compra y vende vehículos de forma rápida y segura.
+      </p>
+
+    </section>
+
+    <section>
+
+      <h2>Vehículos publicados</h2>
+
+      <div id="posts"></div>
+
+      <div id="pagination"></div>
+
+    </section>
+
   </main>
 
   <footer class="custom-footer">
-    <p>&copy; 2026 Mi Blog - Desarrollado por Leonardo</p>
+
+    <p>
+      &copy; 2026 AutoMarket - Desarrollado por Leonardo
+    </p>
+
   </footer>
 
   <script src="js/app.js"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       renderNavbar();
-      loadPosts();
+      loadVehicles();
     });
   </script>
+
 </body>
 </html>
